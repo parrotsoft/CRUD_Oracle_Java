@@ -294,26 +294,39 @@ public class Main extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Manejador de evento del formulario
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        // Si se activa el boton de nuevo dispara la funcion que activa el form
         if (e.getSource() == this.btnNuevo) {
             this.enableForm(false);
         }
 
+        // Cuando se active el boton de guardar realiza una validacion para ver si actualiza o inserta.
         if (e.getSource() == this.btnGuardar) {
-            if (this.id != 0) {
-                this.actualizar();
+            if (this.validarInput()) {
+                if (this.id != 0) {
+                    this.actualizar();
+                } else {
+                    this.guardar();
+                }
+                this.listar();
             } else {
-                this.guardar();
+                JOptionPane.showMessageDialog(null, "Verificar, todos los campos son requeridos", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            this.listar();
         }
 
+        // Limpia y desactiva los campos del formulario
         if (e.getSource() == this.btnCancelar) {
             this.enableForm(true);
             this.id = 0;
         }
 
+        // Gestiona la eliminacion
         if (e.getSource() == this.btnEliminar) {
             int input = JOptionPane.showConfirmDialog(null,
                     "Confirma la eliminacion de registro actual?", "Seleccione una opcion...", JOptionPane.YES_NO_OPTION);
@@ -324,6 +337,9 @@ public class Main extends javax.swing.JFrame implements ActionListener {
 
     }
 
+    /**
+     * Funcion encargada de guardar los datos del formulario
+     */
     private void guardar() {
         try {
             this.model = new DirectorioModel();
@@ -338,6 +354,9 @@ public class Main extends javax.swing.JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Funcion encargada del proceso de actualizacion de los datos.
+     */
     private void actualizar() {
         try {
             this.model = new DirectorioModel();
@@ -352,6 +371,9 @@ public class Main extends javax.swing.JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Funcion encargada del proceso de eliminacion
+     */
     private void eliminar() {
         try {
             this.model = new DirectorioModel();
@@ -367,10 +389,15 @@ public class Main extends javax.swing.JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Esta funcion se encarga de configurar la tabla, al tiempo que 
+     * muestra todos los datos que esten guardados en la tabla de la DB y el
+     * manejo del evento de doble click sobre la fila para editar.
+     */
     private void listar() {
         try {
             this.model = new DirectorioModel();
-            
+
             this.lista = this.model.listar();
 
             String[] cols = {"ID", "NOMBRE", "APELLIDOS", "CORREO", "TELEFONO"};
@@ -410,6 +437,22 @@ public class Main extends javax.swing.JFrame implements ActionListener {
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Esta funcion se encarga de validar que todos los campos del formulario
+     * contengan informacion
+     * @return 
+     */
+    private boolean validarInput() {
+        if (this.txtNombre.getText().length() > 0
+                && this.txtApellido.getText().length() > 0
+                && this.txtCorreo.getText().length() > 0
+                && this.txtCelular.getText().length() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
