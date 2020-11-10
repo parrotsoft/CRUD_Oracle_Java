@@ -1,0 +1,25 @@
+CREATE TABLE directorios (
+  id      NUMBER(10)    NOT NULL,
+  nombre VARCHAR2(100) NOT NULL,
+  apellidos VARCHAR2(100) NOT NULL,
+  correo VARCHAR2(100) NOT NULL,
+  celular VARCHAR2(50) NOT NULL
+);
+
+ALTER TABLE directorios
+  ADD (
+    CONSTRAINT directorios_pk PRIMARY KEY (id)
+  );
+  
+  
+CREATE SEQUENCE directorios_sequence;
+
+
+CREATE OR REPLACE TRIGGER directorios_on_insert
+BEFORE INSERT ON directorios
+  FOR EACH ROW
+BEGIN
+  SELECT directorios_sequence.nextval
+  INTO :new.id
+  FROM dual;
+END;
