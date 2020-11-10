@@ -92,7 +92,6 @@ public class DirectorioModel {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                System.out.println(rs.getString(1));
                 IDirectorio fila = new IDirectorio();
                 fila.setId(rs.getInt(1));
                 fila.setNombre(rs.getString(2));
